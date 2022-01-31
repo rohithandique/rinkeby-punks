@@ -6,11 +6,12 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import abi from "../abi/abi.json";
 
-export default function BuyTiger(props) {
+export default function BuyPunl(props) {
 
-    const { imageNo } = props;
-    const { currentAccount, tigerInfo } = useAuth()
+    const { imageNo, owner } = props;
+    const { user, punkPrice } = useAuth()
     const contractAddr = "0xfb6B832Ff91664620E699B0dc615996A6E80Ec0C";
+    console.log(punkPrice)
 
     const handleSubmit = async () => {
         const { ethereum } = window; //injected by metamask
@@ -19,21 +20,19 @@ export default function BuyTiger(props) {
         //gets the account
         const signer = provider.getSigner(); 
 
-        const wallet = new ethers.Wallet(process.env.REACT_APP_PRIVATE_KEY, provider)
-        //const walletSigner = wallet.connect(provider);
-
-        //connects with the contract
-        const connectedContract = new ethers.Contract(contract_address, abi, wallet);
-        console.log(wallet)
-        console.log(signer)
-
-        const params = [{
-            from: currentAccount,
-            to: tigerInfo[imageNo][0],
-            value: ethers.utils.parseUnits(tigerInfo[imageNo][1], 'ether').toHexString()
-        }];
-
         try {
+            const wallet = new ethers.Wallet('e8cb29e9030d295a1034cf63d85a55aa5c2ced5045206c6fc6cd347a891b360a', provider)
+
+            //connects with the contract
+            const connectedContract = new ethers.Contract(contractAddr, abi.output.abi, wallet);
+            console.log(wallet)
+            console.log(signer)
+
+            const params = [{
+                from: user.wallet_address,
+                to: owner,
+                value: ethers.utils.parseUnits(punkPrice[imageNo].toString(), 'ether').toHexString()
+            }];
             await provider.send('eth_sendTransaction', params)
 
             provider.getGasPrice().then((currentPrice)=> {
@@ -44,11 +43,11 @@ export default function BuyTiger(props) {
                     gasLimit: ethers.utils.hexlify(1000000),
                 }
 
-                connectedContract.transferFrom(tigerInfo[imageNo][0], currentAccount, imageNo, tx).then(()=>{
-                    updateDoc(doc(db, "tigerPrice", "tigers"), {
+                connectedContract.transferFrom(owner, user.wallet_address, imageNo, tx).then(()=>{
+                    updateDoc(doc(db, "punks", "minted"), {
                         [imageNo] : {
-                            price: tigerInfo[imageNo][1],
-                            owner: currentAccount
+                            price: punkPrice[imageNo],
+                            owner: user.wallet_address
                         }
                     }).then(()=>{
                         window.location.reload()

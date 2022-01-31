@@ -6,16 +6,16 @@ import { Box, Image, Badge, Center, useDisclosure, Button,
 import { useAuth } from '../contexts/AuthContext';
 import abi from "../abi/abi.json"
 import MintPunk from './MintPunk';
-
+import SellPunk from "./SellPunk"
+import BuyPunk from "./BuyPunk"
 
 export default function Punk(props) {
 
-    const { user, ownedPunks, mintedTigers } = useAuth();
+    const { ownedPunks, mintedPunks, listedPunks, punkPrice } = useAuth();
     const {imageSrc, imageNo} = props;
     const { onOpen, isOpen, onClose  } = useDisclosure()
     const [ owner, setOwner ] = useState("")
     const contractAddr = "0xfb6B832Ff91664620E699B0dc615996A6E80Ec0C";
-
     useEffect(() => {
         let isConnected = true;
         const getOwner = async () => {
@@ -26,7 +26,7 @@ export default function Punk(props) {
                 //gets the account
                 const signer = provider.getSigner(); 
                 const connectedContract = new ethers.Contract(contractAddr, abi.output.abi, signer);
-                if(mintedTigers.includes(imageNo.toString())) {
+                if(mintedPunks.includes(imageNo.toString())) {
                     let _owner = await connectedContract.ownerOf( imageNo );
                     setOwner(_owner)
                 }
@@ -35,16 +35,14 @@ export default function Punk(props) {
                 console.log(err);
             }
         }
-    
+        
         if(isConnected) {
             getOwner()
           }
         return () => {
             isConnected = false;
         };
-    }, [imageNo, mintedTigers]);
-    
-
+    }, [imageNo, mintedPunks]);
     return (
         <Center>
             
@@ -57,7 +55,9 @@ export default function Punk(props) {
                     #{imageNo}
                 </Badge>
                 <Badge borderRadius='full' px='2' mx='2' colorScheme='blue'>
-                    {mintedTigers.includes(imageNo.toString()) ? "Minted" : "Not Minted"}
+                    {mintedPunks.includes(imageNo.toString()) ? 
+                        listedPunks.includes(imageNo.toString()) ?
+                    "Listed" : "Not Listed" : "Not Minted"}
                 </Badge>
                 <Box
                     color='gray.500'
@@ -84,7 +84,9 @@ export default function Punk(props) {
                 </Button>
                 :
                 <Button onClick={onOpen} variant="solid">
-                    {ownedPunks.includes(parseInt(imageNo)) ? "List" : "Buy"}
+                    {ownedPunks.includes(parseInt(imageNo)) ?
+                        listedPunks.includes(imageNo.toString()) ? 
+                    "Edit" : "List" : "Buy"}
                 </Button>
                 }
                 
@@ -94,11 +96,14 @@ export default function Punk(props) {
                 </Box>
 
                 <Box display='flex' mt='2' alignItems='center'>
-                    Price: {mintedTigers.includes(imageNo.toString()) ? " ETH"  : "Not Set"} 
+                    Price: {mintedPunks.includes(imageNo.toString()) ? 
+                        listedPunks.includes(imageNo.toString()) ? 
+                    punkPrice[imageNo]+
+                    " ETH" : "Not Set" : "FREE!" } 
                 </Box>
 
                 Currently Owned by: 
-                <p>{owner==="" ? "0x000000...." : user ? user.sub : ""}</p>
+                <p>{owner==="" ? "0x000000...." : owner.substring(0, 20)+"..."}</p>
             </Box>
             </Box>  
             <Modal isCentered isOpen={isOpen} onClose={onClose} size="xl">
@@ -107,8 +112,11 @@ export default function Punk(props) {
                 <ModalHeader>RinkebyPunk#{imageNo}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    {mintedTigers.includes(imageNo.toString()) ?
-                    "Buy"
+                    {mintedPunks.includes(imageNo.toString()) ? 
+                    ownedPunks.includes(imageNo) ?
+                    <SellPunk imageNo={imageNo}/>
+                    :
+                    <BuyPunk imageNo={imageNo} owner={owner}/>
                     :
                     <MintPunk imageNo={imageNo}/>
                     }

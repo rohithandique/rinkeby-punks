@@ -19,14 +19,24 @@ export default function NavBar() {
     const mobileNav = useDisclosure();
     const contractAddr = "0xfb6B832Ff91664620E699B0dc615996A6E80Ec0C";
 
-    const { user, setOwnedPunks, setMintedTigers } = useAuth();
+    const { user, setOwnedPunks, setMintedPunks, setListedPunks, setPunkPrice } = useAuth();
     useEffect(() => {
         let isConnected = true;
         const getWalletOfOwner = async() => {
           try {
-            const docRef = doc(db, "punks", "minted");
-            const docSnap = await getDoc(docRef);
-            setMintedTigers(Object.keys(docSnap.data()))
+            const docRef1 = doc(db, "punks", "minted");
+            const docSnap1 = await getDoc(docRef1);
+            setMintedPunks(Object.keys(docSnap1.data()))
+            let _listedPunks = []
+            let _punkPrice = {}
+            for( const i in docSnap1.data()) {
+                if('listed' in docSnap1.data()[i] &&  docSnap1.data()[i]['listed']===true) {
+                    _listedPunks.push(i)
+                    _punkPrice[i]=docSnap1.data()[i]['price']
+                }
+            }
+            setListedPunks(_listedPunks);
+            setPunkPrice(_punkPrice);
             const { ethereum } = window; //injected by metamask
             //connect to an ethereum node
             const provider = new ethers.providers.Web3Provider(ethereum); 
@@ -50,7 +60,7 @@ export default function NavBar() {
         return () => {
           isConnected = false;
         };
-      }, [setOwnedPunks, user, setMintedTigers]);
+      }, [setOwnedPunks, user, setMintedPunks, setListedPunks, setPunkPrice]);
 
     return (
         <>

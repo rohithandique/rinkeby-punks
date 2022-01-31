@@ -10,9 +10,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { ethers } from "ethers";
 import abi from "../abi/abi.json";
 
-export default function SellTiger(props) {
+export default function SellPunk(props) {
 
-    const { currentAccount } = useAuth()
+    const { user } = useAuth()
     const { imageNo } = props;
     const priceRef = useRef();
     const contractAddr = "0xfb6B832Ff91664620E699B0dc615996A6E80Ec0C";
@@ -26,21 +26,21 @@ export default function SellTiger(props) {
         //gets the account
         const signer = provider.getSigner(); 
         //connects with the contract
-        const connectedContract = new ethers.Contract(contract_address, abi, signer);
+        const connectedContract = new ethers.Contract(contractAddr, abi.output.abi, signer);
         try {
 
             const isApproved = await connectedContract.getApproved(imageNo);
             console.log("out")
 
-            if(isApproved!=="0x08CEA67f22bb8766A22363f210162f193888f2c9") {
+            if(isApproved!=="0x1A81FCbe4a7b9d43B831Ed47A1100262D47eB8cD") {
                 console.log("in")
-                await connectedContract.approve("0x08CEA67f22bb8766A22363f210162f193888f2c9", imageNo);
+                await connectedContract.approve("0x1A81FCbe4a7b9d43B831Ed47A1100262D47eB8cD", imageNo);
             }
 
-            await updateDoc(doc(db, "tigerPrice", "tigers"), {
+            await updateDoc(doc(db, "punks", "minted"), {
                 [imageNo] : {
                     price: priceRef.current.value,
-                    owner: currentAccount
+                    owner: user.wallet_address
                 }
             })
             window.location.reload()
