@@ -3,7 +3,6 @@ import {
     FormControl, FormLabel, Input, FormHelperText, Box,
     HStack, Button
   } from '@chakra-ui/react'
-import { useAuth } from '../contexts/AuthContext'
 import { useNavigate, createSearchParams } from 'react-router-dom'
 
 export default function SearchBar() {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   chakra, Box, Flex, useColorModeValue, VisuallyHidden, HStack, Button, useDisclosure,
   VStack, IconButton, CloseButton,
@@ -7,10 +7,50 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { Link } from '@chakra-ui/react'
 import { Link as RouterLink } from "react-router-dom"
 import LoginButton from "../components/LoginButton";
+import abi from "../abi/abi.json"
+import { ethers } from 'ethers';
+import { useAuth } from '../contexts/AuthContext';
+import { db } from '../firebase';
+import { doc, getDoc} from "firebase/firestore";
 
 export default function NavBar() {
+
     const bg = useColorModeValue("white", "gray.800");
     const mobileNav = useDisclosure();
+    const contractAddr = "0xfb6B832Ff91664620E699B0dc615996A6E80Ec0C";
+
+    const { user, setOwnedPunks, setMintedTigers } = useAuth();
+    useEffect(() => {
+        let isConnected = true;
+        const getWalletOfOwner = async() => {
+          try {
+            const docRef = doc(db, "punks", "minted");
+            const docSnap = await getDoc(docRef);
+            setMintedTigers(Object.keys(docSnap.data()))
+            const { ethereum } = window; //injected by metamask
+            //connect to an ethereum node
+            const provider = new ethers.providers.Web3Provider(ethereum); 
+            //gets the account
+            const signer = provider.getSigner(); 
+            //connects with the contract
+            const connectedContract = new ethers.Contract(contractAddr, abi.output.abi, signer);
+            if(user) {
+              let _ownedPunks = await connectedContract.walletOfOwner(user.wallet_address);
+              setOwnedPunks(_ownedPunks.map(x => parseInt(x["_hex"])))
+            }
+          } catch(err) {
+            console.log(err)
+          }
+          
+        }
+        if(isConnected) {
+          getWalletOfOwner();
+        }
+      
+        return () => {
+          isConnected = false;
+        };
+      }, [setOwnedPunks, user, setMintedTigers]);
 
     return (
         <>

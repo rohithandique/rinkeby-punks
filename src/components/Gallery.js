@@ -18,7 +18,6 @@ export default function Gallery() {
 
   const fetchData = () => {
     const len = listItems.length;
-    console.log(listItems)
     if(len>=9999) {
       setHasMore(false);
       return;
@@ -35,7 +34,6 @@ export default function Gallery() {
       imageSrc={"https://www.larvalabs.com/cryptopunks/cryptopunk"+number+".png"}/>
       )))
     }
-    
   }
 
   return <>

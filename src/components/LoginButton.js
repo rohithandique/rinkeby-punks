@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Button, VStack, HStack } from '@chakra-ui/react';
 import LOGO from "../images/Unstoppable Domains-Sign-Mono-Dark.svg"
 import UAuth from '@uauth/js';
-import { ethers } from 'ethers';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from "react-router-dom";
 
 export default function LoginButton(props) {
 
     const { screen } = props;
-    const [loading, setLoading] = useState(false)
     const [error, setError] = useState()
     const { user, setUser } = useAuth();
 
@@ -24,17 +22,15 @@ export default function LoginButton(props) {
     let navigate = useNavigate();
 
     useEffect(() => {
-      setLoading(true)
       uauth
         .user()
         .then(setUser)
         .catch(() => {})
-        .finally(() => setLoading(false))
+        .finally(() => console.log("Logged In"))
     }, [setUser]) // eslint-disable-line
 
     const handleLogin = () => {
         if(user) return;
-        setLoading(true)
         uauth
         .loginWithPopup()
         .then(() => {
@@ -46,7 +42,6 @@ export default function LoginButton(props) {
             console.log(error)
         })
         .finally(async() => {
-            setLoading(false);
             try {
                 const { ethereum } = window;
 
@@ -56,6 +51,7 @@ export default function LoginButton(props) {
                 }
                 const accounts = await ethereum.request({ method: "eth_requestAccounts" });
                 const chainId = await ethereum.request({ method: 'eth_chainId' });
+                console.log(accounts)
                 console.log(chainId)
                 navigate("/callback", { replace: false });
 
@@ -66,7 +62,6 @@ export default function LoginButton(props) {
     }
   
     const handleLogout = () => {
-        setLoading(true)
         uauth
         .logout()
         .then(() => setUser(undefined))
@@ -74,7 +69,7 @@ export default function LoginButton(props) {
             setError(err)
             console.log(error)
         })
-        .finally(() => setLoading(false))
+        .finally(() => console.log("Logged Out"))
     }
 
     return <div>

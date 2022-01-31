@@ -10,15 +10,17 @@ export function AuthProvider({ children }) {
 
     const [user, setUser] = useState()
     const [currentNetwork, setCurrentNetwork] = useState()
-    const [ownedTigers, setOwnedTigers] = useState([])
+    const [ownedPunks, setOwnedPunks] = useState([])
     const [listedTigers, setListedTigers] = useState([])
+    const [mintedTigers, setMintedTigers] = useState([])
     const [tigerInfo, setTigerInfo] = useState(Array.from({length: 5555},()=> Array.from({length: 2}, () => "")));
 
     const value = {
         user, setUser, 
         currentNetwork, setCurrentNetwork,
-        ownedTigers, setOwnedTigers,
+        ownedPunks, setOwnedPunks,
         listedTigers, setListedTigers,
+        mintedTigers, setMintedTigers,
         tigerInfo, setTigerInfo,
     }
 
