@@ -14,7 +14,7 @@ export default function LoginButton(props) {
     const uauth = new UAuth({
         clientID: 'PBIVskwQFi7nbY4pPzzeeQZIGSSAqAvzpfQyGaEFCEE=',
         clientSecret: 'rQC1qnpsP7Te+yAxzBFkMv5OBfOIHPFrtkDiZ4w8i4w=',
-        redirectUri: 'http://localhost:3000/callback',
+        redirectUri: 'https://rinkeby-punks-pearl.vercel.app/callback',
       
         // Must include both the openid and wallet scopes.
         scope: 'openid wallet email:optional',
