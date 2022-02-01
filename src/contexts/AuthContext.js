@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
     const [ownedPunks, setOwnedPunks] = useState([])
     const [listedPunks, setListedPunks] = useState([])
     const [mintedPunks, setMintedPunks] = useState([])
-    const [punkPrice, setPunkPrice] = useState(Array.from({length: 5555},()=> Array.from({length: 2}, () => "")));
+    const [punkPrice, setPunkPrice] = useState();
 
     const value = {
         user, setUser, 

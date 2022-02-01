@@ -11,7 +11,7 @@ export default function MintPunk(props) {
 
     const { imageNo } = props;
 
-    const contractAddr = "0xfb6B832Ff91664620E699B0dc615996A6E80Ec0C";
+    const contractAddr = "0xDb6B1feb735B832E85BdB4A8aa0C12Fc2B11F0DC";
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -21,11 +21,14 @@ export default function MintPunk(props) {
             const provider = new ethers.providers.Web3Provider(ethereum); 
             //gets the account
             const signer = provider.getSigner(); 
+            const _owner = await signer.getAddress()
             //connects with the contract
             const connectedContract = new ethers.Contract(contractAddr, abi.output.abi, signer);
             await connectedContract.mintNFT(imageNo);
             await updateDoc(doc(db, "punks", "minted"), {
-                [imageNo] : true
+                [imageNo] : {
+                    owner: _owner
+                }
             })
             console.log("SUCCESS");
             window.location.reload();

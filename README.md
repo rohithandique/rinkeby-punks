@@ -11,6 +11,6 @@ Website (WIP) - []()
 Youtube - []()
 
 ### Contact Info
-- Discord ID -
-- Email ID - [](mailto:)
-- Gitcoin - []()
+- Discord ID - piyush #5674
+- Email ID - [ingalepiyush459@gmail.com](mailto:ingalepiyush459@gmail.com)
+- Gitcoin - [PiyushPI07](https://gitcoin.co/piyushpi07)

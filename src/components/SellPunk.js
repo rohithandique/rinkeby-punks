@@ -15,7 +15,7 @@ export default function SellPunk(props) {
     const { user } = useAuth()
     const { imageNo } = props;
     const priceRef = useRef();
-    const contractAddr = "0xfb6B832Ff91664620E699B0dc615996A6E80Ec0C";
+    const contractAddr = "0xDb6B1feb735B832E85BdB4A8aa0C12Fc2B11F0DC";
 
     const handleSubmit = async (e) => {
         e.preventDefault()

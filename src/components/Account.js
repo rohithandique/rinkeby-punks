@@ -43,7 +43,7 @@ export default function Account() {
     <NavBar />
     <Box backgroundColor={useColorModeValue("gray.100", "gray.600")} m={4} borderRadius={10}>
         <Box ml={2}>
-            Connected Wallet: {user.wallet_address}
+            Owned NFTs:
         </Box>
     </Box>
     {isLoading 

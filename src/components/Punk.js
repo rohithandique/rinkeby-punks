@@ -15,7 +15,7 @@ export default function Punk(props) {
     const {imageSrc, imageNo} = props;
     const { onOpen, isOpen, onClose  } = useDisclosure()
     const [ owner, setOwner ] = useState("")
-    const contractAddr = "0xfb6B832Ff91664620E699B0dc615996A6E80Ec0C";
+    const contractAddr = "0xDb6B1feb735B832E85BdB4A8aa0C12Fc2B11F0DC";
     useEffect(() => {
         let isConnected = true;
         const getOwner = async () => {
@@ -118,7 +118,7 @@ export default function Punk(props) {
                     :
                     <BuyPunk imageNo={imageNo} owner={owner}/>
                     :
-                    <MintPunk imageNo={imageNo}/>
+                    <MintPunk imageNo={imageNo} owner={owner}/>
                     }
                 </ModalBody>
 
