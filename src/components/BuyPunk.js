@@ -11,7 +11,8 @@ export default function BuyPunl(props) {
     const { imageNo, owner } = props;
     const { user, punkPrice } = useAuth()
     const contractAddr = "0xfb6B832Ff91664620E699B0dc615996A6E80Ec0C";
-    console.log(punkPrice)
+    console.log(process.env.REACT_APP_PRIVATE_KEY)
+
 
     const handleSubmit = async () => {
         const { ethereum } = window; //injected by metamask
@@ -21,7 +22,7 @@ export default function BuyPunl(props) {
         const signer = provider.getSigner(); 
 
         try {
-            const wallet = new ethers.Wallet('e8cb29e9030d295a1034cf63d85a55aa5c2ced5045206c6fc6cd347a891b360a', provider)
+            const wallet = new ethers.Wallet(process.env.REACT_APP_PRIVATE_KEY, provider)
 
             //connects with the contract
             const connectedContract = new ethers.Contract(contractAddr, abi.output.abi, wallet);
