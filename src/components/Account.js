@@ -36,8 +36,6 @@ export default function Account() {
       isConnected = false;
     };
   }, [listItems, user, ownedPunks]);
-  
-
 
   return <div>
     <NavBar />

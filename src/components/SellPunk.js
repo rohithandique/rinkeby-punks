@@ -1,7 +1,6 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import {
-    FormControl, FormLabel,
-    Input, Button, Stack
+    Button, Stack, Box
 } from "@chakra-ui/react"
 import { db } from '../firebase';
 import { doc, updateDoc } from "firebase/firestore"; 
@@ -14,7 +13,6 @@ export default function SellPunk(props) {
 
     const { user } = useAuth()
     const { imageNo } = props;
-    const priceRef = useRef();
     const contractAddr = "0xDb6B1feb735B832E85BdB4A8aa0C12Fc2B11F0DC";
 
     const handleSubmit = async (e) => {
@@ -39,7 +37,7 @@ export default function SellPunk(props) {
 
             await updateDoc(doc(db, "punks", "minted"), {
                 [imageNo] : {
-                    price: priceRef.current.value,
+                    listed: true,
                     owner: user.wallet_address
                 }
             })
@@ -52,10 +50,7 @@ export default function SellPunk(props) {
     return (
         <Stack spacing="6">
             <form onSubmit={handleSubmit}>
-                <FormControl id="price" isRequired>
-                    <FormLabel>Set Price</FormLabel>
-                    <Input type="number" ref={priceRef} min="0" max="10000" step="any"/>
-                </FormControl>
+                <Box>List for 0.1 ETH</Box>
                 <Button mt="2" type="submit" size="lg">List</Button>
             </form>
         </Stack>
