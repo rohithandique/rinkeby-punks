@@ -27,8 +27,8 @@ function App() {
       :
       <Alert status='error'>
             <AlertIcon />
-            <AlertTitle mr={2}>You're not logged in!</AlertTitle>
-            <AlertDescription>Log In to use all functionalities.</AlertDescription>
+            <AlertTitle mr={2}>Wrong Network!</AlertTitle>
+            <AlertDescription>Change to Rinkeby and refresh the app.</AlertDescription>
     </Alert>
     }
     <Router>
