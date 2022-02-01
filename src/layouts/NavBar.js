@@ -19,7 +19,7 @@ export default function NavBar() {
     const mobileNav = useDisclosure();
     const contractAddr = "0xDb6B1feb735B832E85BdB4A8aa0C12Fc2B11F0DC";
     
-    const { user, setOwnedPunks, setMintedPunks, setListedPunks, setPunkPrice, 
+    const { user, setOwnedPunks, setMintedPunks, setListedPunks, 
         setCurrentNetwork } = useAuth();
     useEffect(() => {
         let isConnected = true;
@@ -38,15 +38,12 @@ export default function NavBar() {
             const docSnap1 = await getDoc(docRef1);
             setMintedPunks(Object.keys(docSnap1.data()))
             let _listedPunks = []
-            let _punkPrice = {}
             for( const i in docSnap1.data()) {
                 if(docSnap1.data()[i]['listed']===true) {
                     _listedPunks.push(i)
-                    _punkPrice[i]=docSnap1.data()[i]['price']
                 }
             }
             setListedPunks(_listedPunks);
-            setPunkPrice(_punkPrice);
             
             if(user) {
               let _ownedPunks = await connectedContract.walletOfOwner(user.wallet_address);
@@ -64,7 +61,7 @@ export default function NavBar() {
         return () => {
           isConnected = false;
         };
-      }, [setOwnedPunks, user, setMintedPunks, setListedPunks, setPunkPrice, setCurrentNetwork]);
+      }, [setOwnedPunks, user, setMintedPunks, setListedPunks, setCurrentNetwork]);
 
     return (
         <>

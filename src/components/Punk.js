@@ -11,7 +11,7 @@ import BuyPunk from "./BuyPunk"
 
 export default function Punk(props) {
 
-    const { ownedPunks, mintedPunks, listedPunks, punkPrice } = useAuth();
+    const { ownedPunks, mintedPunks, listedPunks } = useAuth();
     const {imageSrc, imageNo} = props;
     const { onOpen, isOpen, onClose  } = useDisclosure()
     const [ owner, setOwner ] = useState("")
@@ -35,7 +35,7 @@ export default function Punk(props) {
                 console.log(err);
             }
         }
-        
+
         if(isConnected) {
             getOwner()
           }
@@ -98,8 +98,8 @@ export default function Punk(props) {
                 <Box display='flex' mt='2' alignItems='center'>
                     Price: {mintedPunks.includes(imageNo.toString()) ? 
                         listedPunks.includes(imageNo.toString()) ? 
-                    punkPrice[imageNo]+
-                    " ETH" : "Not Set" : "FREE!" } 
+                    
+                    "0.1 ETH" : "Not Set" : "FREE!" } 
                 </Box>
 
                 Currently Owned by: 

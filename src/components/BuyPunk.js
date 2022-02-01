@@ -9,13 +9,10 @@ import abi from "../abi/abi.json";
 export default function BuyPunl(props) {
 
     const { imageNo, owner } = props;
-    const { user, punkPrice } = useAuth()
+    const { user } = useAuth()
     const contractAddr = "0xDb6B1feb735B832E85BdB4A8aa0C12Fc2B11F0DC";
 
     const handleSubmit = async () => {
-        if(punkPrice[imageNo]===undefined) {
-            return;
-        }
         const { ethereum } = window; //injected by metamask
         //connect to an ethereum node
         const provider = new ethers.providers.Web3Provider(ethereum); 
@@ -31,7 +28,7 @@ export default function BuyPunl(props) {
             const params = [{
                 from: user.wallet_address,
                 to: owner,
-                value: ethers.utils.parseUnits(punkPrice[imageNo].toString(), 'ether').toHexString()
+                value: ethers.utils.parseUnits('0.1', 'ether').toHexString()
             }];
             await provider.send('eth_sendTransaction', params)
 
